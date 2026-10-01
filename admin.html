@@ -70,8 +70,21 @@ function uid(){return (crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math
 function safeName(n){return n.normalize("NFKD").replace(/[^a-zA-Z0-9._-]/g,"-").replace(/-+/g,"-")}
 function readFile(f){return new Promise((ok,no)=>{let r=new FileReader();r.onload=()=>ok(r.result.split(",")[1]);r.onerror=no;r.readAsDataURL(f)})}
 async function uploadFile(f,path){if(f.size>15000000)throw Error("الصورة "+f.name+" أكبر من 15MB");let content=await readFile(f);let r=await api(path,{method:"PUT",body:JSON.stringify({message:"MIM: upload project image",content,branch:BRANCH})});return "https://raw.githubusercontent.com/"+OWNER+"/"+REPO+"/"+BRANCH+"/"+path+"?v="+Date.now()}
-$("newProject").onclick=()=>{editingId=null;selectedFiles=[];$("projectForm").style.display="block";$("projectTitle").value="";$("projectTag").value="";$("projectDescription").value="";$("projectFiles").value="";$("selectedPreview").innerHTML="";$("uploadStatus").textContent=""}
-$("cancelProject").onclick=()=>{$("projectForm").style.display="none";selectedFiles=[]}
+function openProjectForm(){
+  editingId=null; selectedFiles=[];
+  const form=$("projectForm");
+  if(!form){msg("تعذر العثور على نموذج إضافة المشروع");return}
+  form.style.display="block";
+  $("projectTitle").value="";
+  $("projectTag").value="";
+  $("projectDescription").value="";
+  $("projectFiles").value="";
+  $("selectedPreview").innerHTML="";
+  $("uploadStatus").textContent="";
+  form.scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("newProject").addEventListener("click",openProjectForm);
+$("cancelProject").addEventListener("click",()=>{$("projectForm").style.display="none";selectedFiles=[]});
 $("projectFiles").onchange=()=>{selectedFiles=[...$("projectFiles").files];$("selectedPreview").innerHTML=selectedFiles.map(f=>'<div class="imgBox"><img src="'+URL.createObjectURL(f)+'"></div>').join("")}
 $("saveProject").onclick=async()=>{try{let title=$("projectTitle").value.trim()||"مشروع ميم";let tag=$("projectTag").value.trim()||"PROJECT";let description=$("projectDescription").value.trim();if(!selectedFiles.length&&editingId===null)return msg("اختر صورة واحدة على الأقل");let id=editingId||uid();let p=d.projects.find(x=>x.id===id);if(!p){p={id,title,tag,description,images:[]};d.projects.unshift(p)}else{p.title=title;p.tag=tag;p.description=description}let done=0;for(const f of selectedFiles){let path="portfolio/projects/"+id+"/"+Date.now()+"-"+safeName(f.name);let url=await uploadFile(f,path);p.images.push(url);done++;$("uploadStatus").textContent="تم رفع "+done+" من "+selectedFiles.length+" صور"}renderProjects();stats();$("projectForm").style.display="none";selectedFiles=[];msg("تم حفظ المشروع. اضغط «حفظ ومزامنة الموقع»");}catch(e){msg(e.message)}}
 window.editProject=i=>{let p=d.projects[i];editingId=p.id;$("projectForm").style.display="block";$("projectTitle").value=p.title||"";$("projectTag").value=p.tag||"";$("projectDescription").value=p.description||"";$("projectFiles").value="";$("selectedPreview").innerHTML="";$("uploadStatus").textContent="أنت تعدل مشروعًا موجودًا. الصور الحالية ظاهرة أسفل المشروع ويمكنك إضافة صور جديدة.";scrollTo({top:document.getElementById("projectForm").offsetTop-100,behavior:"smooth"})}
