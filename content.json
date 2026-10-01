@@ -3,7 +3,7 @@
   "brandMark": "ميم",
   "badge": "دعاية وإعلان • حلول بصرية متكاملة",
   "heroTitle": "نصنع حضورًا يُرى ويُتذكر",
-  "heroText": "كلادينج وواجهات، حروف بارزة، تصميم جرافيك، وفيديوهات إبداعية بالذكاء الاصطناعي",
+  "heroText": "كلادينج وواجهات حروف بارزة خدمات إبداعية بالذكاء الاصطناعي",
   "whatsapp": "https://wa.me/966546898667",
   "services": [
     {
@@ -31,20 +31,13 @@
     "active": false,
     "title": "عرض خاص",
     "text": "اكتب تفاصيل العرض من لوحة التحكم.",
-    "price": "",
     "button": "اطلب العرض"
   },
   "projects": [
     {
-      "id": "legacy-1",
-      "title": "مشروع",
-      "tag": "PROJECT",
-      "description": "",
       "images": [
-        "https://raw.githubusercontent.com/mohmeadhosni3-droid/MIM/main/portfolio/1790850498291-WhatsApp-Image-2026-09-29-at-5.38.43-PM.jpeg?v=1790850500399"
+        "/portfolio/whatsapp-image-2026-09-29-at-53846-pm-1.jpeg"
       ]
     }
-  ],
-  "portfolio": [],
-  "videos": []
+  ]
 }
