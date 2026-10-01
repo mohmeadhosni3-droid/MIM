@@ -1,0 +1,200 @@
+media:
+  - name: images
+    label: صور الموقع والمشاريع
+    input: portfolio
+    output: /portfolio
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp, gif]
+    rename: safe
+  - name: videos
+    label: فيديوهات الموقع
+    input: portfolio/videos
+    output: /portfolio/videos
+    categories: [video]
+    extensions: [mp4, webm, mov]
+    rename: safe
+
+content:
+  - name: site
+    label: إعدادات الموقع والأقسام
+    type: file
+    path: content.json
+    format: json
+    fields:
+      - name: siteName
+        label: اسم الموقع
+        type: string
+      - name: brandMark
+        label: العلامة المختصرة
+        type: string
+      - name: badge
+        label: الشارة أعلى الصفحة
+        type: string
+      - name: heroTitle
+        label: العنوان الرئيسي
+        type: string
+      - name: heroText
+        label: وصف الصفحة الرئيسية
+        type: text
+      - name: heroPrimary
+        label: زر الهيرو الرئيسي
+        type: string
+      - name: heroSecondary
+        label: زر الهيرو الثاني
+        type: string
+      - name: whatsapp
+        label: رابط واتساب
+        type: string
+      - name: servicesLabel
+        label: عنوان قسم الخدمات الصغير
+        type: string
+      - name: servicesTitle
+        label: عنوان قسم الخدمات
+        type: string
+      - name: servicesText
+        label: وصف قسم الخدمات
+        type: text
+      - name: aiLabel
+        label: عنوان AI الصغير
+        type: string
+      - name: aiTitle
+        label: عنوان قسم AI
+        type: string
+      - name: aiText
+        label: وصف قسم AI
+        type: text
+      - name: workLabel
+        label: عنوان الأعمال الصغير
+        type: string
+      - name: workTitle
+        label: عنوان قسم الأعمال
+        type: string
+      - name: workText
+        label: وصف قسم الأعمال
+        type: text
+      - name: motionLabel
+        label: عنوان الفيديوهات الصغير
+        type: string
+      - name: motionTitle
+        label: عنوان قسم الفيديوهات
+        type: string
+      - name: contactLabel
+        label: عنوان التواصل الصغير
+        type: string
+      - name: contactTitle
+        label: عنوان قسم التواصل
+        type: string
+      - name: contactText
+        label: وصف قسم التواصل
+        type: text
+      - name: contactButton
+        label: زر التواصل
+        type: string
+      - name: footerText
+        label: نص الفوتر
+        type: string
+      - name: services
+        label: الخدمات
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title} ({tag})"
+        fields:
+          - name: title
+            label: اسم الخدمة
+            type: string
+          - name: tag
+            label: الكود
+            type: string
+          - name: text
+            label: وصف الخدمة
+            type: text
+      - name: offer
+        label: العرض
+        type: object
+        fields:
+          - name: active
+            label: إظهار العرض
+            type: boolean
+          - name: title
+            label: عنوان العرض
+            type: string
+          - name: text
+            label: تفاصيل العرض
+            type: text
+          - name: price
+            label: السعر
+            type: string
+          - name: button
+            label: نص زر العرض
+            type: string
+      - name: projects
+        label: المشاريع والمعارض
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title} ({tag})"
+        fields:
+          - name: id
+            label: معرف المشروع
+            type: string
+          - name: title
+            label: اسم المشروع
+            type: string
+          - name: tag
+            label: تصنيف المشروع
+            type: string
+          - name: description
+            label: وصف المشروع
+            type: text
+          - name: images
+            label: صور المشروع
+            type: image
+            options:
+              media: images
+              path: projects
+              multiple:
+                max: 30
+              unique: true
+      - name: videos
+        label: الفيديوهات
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title} ({tag})"
+        fields:
+          - name: title
+            label: اسم الفيديو
+            type: string
+          - name: tag
+            label: التصنيف
+            type: string
+          - name: url
+            label: ملف الفيديو
+            type: file
+            options:
+              media: videos
+              multiple: false
+      - name: portfolio
+        label: معرض قديم
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: العنوان
+            type: string
+          - name: tag
+            label: التصنيف
+            type: string
+          - name: url
+            label: الرابط
+            type: string
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
