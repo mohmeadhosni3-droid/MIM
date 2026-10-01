@@ -30,13 +30,13 @@
 <div class="card"><h2>إدارة المشاريع</h2>
 <div class="stats"><div class="stat"><b id="projectCount">0</b><span>مشاريع</span></div><div class="stat"><b id="imageCount">0</b><span>صور</span></div><div class="stat"><b id="videoCount">0</b><span>فيديوهات</span></div></div>
 <p class="hint">الآن تقدر تعمل مشروع واحد وتضيف له 1 أو 20 صورة، ثم تعمل مشروعًا ثانيًا بصور مختلفة. كل مشروع يحتفظ بصوره الخاصة.</p>
-<div class="toolbar"><button class="btn primary" id="newProject">+ إضافة مشروع جديد</button></div>
+<div class="toolbar"><button type="button" class="btn primary" id="newProject" onclick="openProjectForm()">+ إضافة مشروع جديد</button></div>
 <div id="projectForm" style="display:none;margin-top:14px">
 <div class="field"><label>اسم المشروع</label><input id="projectTitle" placeholder="مثال: واجهة مطعم ..."></div>
 <div class="row"><div class="field"><label>التصنيف</label><input id="projectTag" placeholder="كلادينج وواجهات"></div><div class="field"><label>وصف مختصر</label><input id="projectDescription"></div></div>
 <div class="field"><label>صور المشروع</label><div class="drop"><input id="projectFiles" type="file" accept="image/*" multiple><div class="hint">يمكن اختيار عدة صور مرة واحدة. أول صورة تصبح صورة الغلاف.</div></div></div>
 <div id="selectedPreview" class="images"></div>
-<div class="toolbar" style="margin-top:10px"><button class="btn primary" id="saveProject">إنشاء المشروع ورفع الصور</button><button class="btn" id="cancelProject">إلغاء</button></div>
+<div class="toolbar" style="margin-top:10px"><button type="button" class="btn primary" id="saveProject" onclick="saveProjectNow()">إنشاء المشروع ورفع الصور</button><button type="button" class="btn" id="cancelProject" onclick="closeProjectForm()">إلغاء</button></div>
 <div id="uploadStatus" class="hint" style="margin-top:8px"></div>
 </div>
 <div id="projectsList"></div>
@@ -83,10 +83,11 @@ function openProjectForm(){
   $("uploadStatus").textContent="";
   form.scrollIntoView({behavior:"smooth",block:"center"});
 }
-$("newProject").addEventListener("click",openProjectForm);
-$("cancelProject").addEventListener("click",()=>{$("projectForm").style.display="none";selectedFiles=[]});
+function closeProjectForm(){$("projectForm").style.display="none";selectedFiles=[]}
+function saveProjectNow(){return $("saveProject")._saveProjectHandler?.()}
+
 $("projectFiles").onchange=()=>{selectedFiles=[...$("projectFiles").files];$("selectedPreview").innerHTML=selectedFiles.map(f=>'<div class="imgBox"><img src="'+URL.createObjectURL(f)+'"></div>').join("")}
-$("saveProject").onclick=async()=>{try{let title=$("projectTitle").value.trim()||"مشروع ميم";let tag=$("projectTag").value.trim()||"PROJECT";let description=$("projectDescription").value.trim();if(!selectedFiles.length&&editingId===null)return msg("اختر صورة واحدة على الأقل");let id=editingId||uid();let p=d.projects.find(x=>x.id===id);if(!p){p={id,title,tag,description,images:[]};d.projects.unshift(p)}else{p.title=title;p.tag=tag;p.description=description}let done=0;for(const f of selectedFiles){let path="portfolio/projects/"+id+"/"+Date.now()+"-"+safeName(f.name);let url=await uploadFile(f,path);p.images.push(url);done++;$("uploadStatus").textContent="تم رفع "+done+" من "+selectedFiles.length+" صور"}renderProjects();stats();$("projectForm").style.display="none";selectedFiles=[];msg("تم حفظ المشروع. اضغط «حفظ ومزامنة الموقع»");}catch(e){msg(e.message)}}
+$("saveProject")._saveProjectHandler=async()=>{try{let title=$("projectTitle").value.trim()||"مشروع ميم";let tag=$("projectTag").value.trim()||"PROJECT";let description=$("projectDescription").value.trim();if(!selectedFiles.length&&editingId===null)return msg("اختر صورة واحدة على الأقل");let id=editingId||uid();let p=d.projects.find(x=>x.id===id);if(!p){p={id,title,tag,description,images:[]};d.projects.unshift(p)}else{p.title=title;p.tag=tag;p.description=description}let done=0;for(const f of selectedFiles){let path="portfolio/projects/"+id+"/"+Date.now()+"-"+safeName(f.name);let url=await uploadFile(f,path);p.images.push(url);done++;$("uploadStatus").textContent="تم رفع "+done+" من "+selectedFiles.length+" صور"}renderProjects();stats();$("projectForm").style.display="none";selectedFiles=[];msg("تم حفظ المشروع. اضغط «حفظ ومزامنة الموقع»");}catch(e){msg(e.message)}}
 window.editProject=i=>{let p=d.projects[i];editingId=p.id;$("projectForm").style.display="block";$("projectTitle").value=p.title||"";$("projectTag").value=p.tag||"";$("projectDescription").value=p.description||"";$("projectFiles").value="";$("selectedPreview").innerHTML="";$("uploadStatus").textContent="أنت تعدل مشروعًا موجودًا. الصور الحالية ظاهرة أسفل المشروع ويمكنك إضافة صور جديدة.";scrollTo({top:document.getElementById("projectForm").offsetTop-100,behavior:"smooth"})}
 window.addMoreImages=i=>{editingId=d.projects[i].id;$("projectForm").style.display="block";$("projectTitle").value=d.projects[i].title||"";$("projectTag").value=d.projects[i].tag||"";$("projectDescription").value=d.projects[i].description||"";$("projectFiles").click()}
 window.removeImage=(pi,ii)=>{if(!confirm("إزالة هذه الصورة من المشروع؟"))return;d.projects[pi].images.splice(ii,1);renderProjects();stats()}
