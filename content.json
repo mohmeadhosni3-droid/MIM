@@ -28,12 +28,18 @@
     }
   ],
   "offer": {
-    "active": false,
+    "active": true,
     "title": "Ø¹Ø±Ø¶ Ø®Ø§Øµ",
     "text": "Ø§ÙØªØ¨ ØªÙØ§ØµÙÙ Ø§ÙØ¹Ø±Ø¶ ÙÙ ÙÙØ­Ø© Ø§ÙØªØ­ÙÙ.",
     "price": "",
     "button": "Ø§Ø·ÙØ¨ Ø§ÙØ¹Ø±Ø¶"
   },
-  "portfolio": [],
+  "portfolio": [
+    {
+      "title": "مشروع",
+      "tag": "PROJECT",
+      "url": "https://raw.githubusercontent.com/mohmeadhosni3-droid/MIM/main/portfolio/1790850498291-WhatsApp-Image-2026-09-29-at-5.38.43-PM.jpeg?v=1790850500399"
+    }
+  ],
   "videos": []
 }
